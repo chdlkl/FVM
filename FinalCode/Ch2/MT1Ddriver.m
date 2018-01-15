@@ -1,7 +1,7 @@
 % setup and test the MT problem in 1D
 clear all;
 close all;
-
+ 
 omega = logspace(1,4,32);
 mu    = 4*pi*1e-7;
 

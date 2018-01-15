@@ -4,12 +4,12 @@ clear all;
 close all;
 
 %% setup the analytic example
-omega = 1;
-sigma = @(x) x.^2+1;
-mu    = @(x) cos(x) + 2;
+omega = 1;  % w = 1
+sigma = @(x) x.^2+1;  % 电导率随位置变化
+mu    = @(x) cos(x) + 2;  % 磁导率随位置变化
 
-b     = @(x) x.*(x-1).*mu(x);  % note b(0) = b(1) = 0;
-e     = @(x) cos(2*pi*x);
+b     = @(x) x.*(x-1).*mu(x);  % 磁场 note b(0) = b(1) = 0;
+e     = @(x) cos(2*pi*x);  % 电场
 
 % The system
 % 1i*w*b + e'           = s1
@@ -22,17 +22,17 @@ s2 = @(x) 2*x-1 - sigma(x).*e(x);
 
 for n = [8  16  32  64  128  256 512  1024   2048]  
   % setup a random nodal mesh
-  h = rand(n,1)*0+1; L = sum(h); h = h/L;
-  x = [0; cumsum(h)];
+  h = rand(n,1)*0+1; L = sum(h); h = h/L;  % 这一行等效于h = h / n
+  x = [0; cumsum(h)];  % x为节点坐标
   % cell-centered mesh
-  xc = x(1:end-1) + diff(x)/2;
+  xc = x(1:end-1) + diff(x)/2; % xc 为每个cell的中心点坐标
  
   % the sources
-  sh = s1(xc);
-  se = s2(x);
+  sh = s1(xc);  % 磁场源
+  se = s2(x);  % 电场源
   
   % the linear system
-  nc = length(sigma(xc));
+  nc = length(sigma(xc));  % [0,1]区间的份数
 
   G    = ddx(nc);
   Av   = ave(nc);
