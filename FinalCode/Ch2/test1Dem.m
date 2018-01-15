@@ -20,7 +20,7 @@ s1 = @(x) 1i*omega*b(x) - 2*pi*sin(2*pi*x);
 s2 = @(x) 2*x-1 - sigma(x).*e(x);
 
 
-for n = [8  16  32  64  128  256 512  1024   2048]
+for n = [8  16  32  64  128  256 512  1024   2048]  
   % setup a random nodal mesh
   h = rand(n,1)*0+1; L = sum(h); h = h/L;
   x = [0; cumsum(h)];
