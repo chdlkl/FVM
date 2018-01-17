@@ -34,20 +34,20 @@ for n = [8  16  32  64  128  256 512  1024   2048]
   % the linear system
   nc = length(sigma(xc));  % [0,1]区间的份数
 
-  G    = ddx(nc);
-  Av   = ave(nc);
-  Linv = sdiag(1./h);
-  Mmu  = sdiag(h./mu(xc));
-  Msig = sdiag(Av'*(sigma(xc).*h));
-  M    = sdiag(Av'*h);
+  G    = ddx(nc);  % n*(n+1)矩阵，对应文章中的G
+  Av   = ave(nc);  % n*(n+1)矩阵，对应文章中的Av
+  Linv = sdiag(1./h);  % 相当于文章中的L-1或Mf
+  Mmu  = sdiag(h./mu(xc));  % 相当于文章中的M(u,f)
+  Msig = sdiag(Av'*(sigma(xc).*h));  % 相当于文章中的M(e,sigma)
+  M    = sdiag(Av'*h);  % 相当于文章中的Me
 
   % set the matrix system
-  % [1i*w         d/dz] [b] - [s1]
-  % [1/mu d/dz  -sigma] [e] - [s2]
+  % [1i*w         d/dz] [b] = [s1]
+  % [1/mu d/dz  -sigma] [e] = [s2]
 
   A = [1i*omega*speye(n)  Linv*G; ...
-        -G'*Linv'*Mmu      -Msig];
-  bb = [sh; M*se]; 
+        -G'*Linv'*Mmu      -Msig];  % 按照书上公式，此处应该是Linv,不应该是Linv'
+  bb = [sh; M*se]; % M*se相当于书上的Me*s
 
   
   eh = A\bb;
@@ -62,6 +62,6 @@ for n = [8  16  32  64  128  256 512  1024   2048]
            norm(real(eh(1:n) -b(xc)),'inf'), ...
            norm(real(eh(1+n:end)-e(x)),'inf'));
            
-  pause(0.5)
+  pause()
   
 end
